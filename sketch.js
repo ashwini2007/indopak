@@ -5,12 +5,14 @@ const Bodies = Matter.Bodies;
 
 var base;
 var cloud,cloudImage
-var enemy1,enemy2,enemy
-
+var enemy1,enemy2,enemy,bullet,bulletimg
+var army;
+var score = 0;
 function preload() {
    cloudImage = loadImage("cloud.png")
    enemy2 = loadImage("tererist1.png")
    enemy1 = loadImage("tererist.png")
+   bulletimg = loadImage("bullet.png")
 }
 
 function setup(){
@@ -19,6 +21,7 @@ function setup(){
     world = engine.world;
     
     base = new Ground(300,370,2400,25);
+    army = new Soldier(40,305,110,110)
 
     
 }
@@ -26,10 +29,27 @@ function setup(){
 function draw(){
     background("white");
     Engine.update(engine);
+    text("Score: "+ score, 150,50);
+    score = score + Math.round(frameCount/60);
     base.display();
+    army.display();
     spawnClouds();
     selectEnemy();
+    //jump();
+   // down();
+   bullet();
     drawSprites();
+
+    //if(keyCode === 87){
+      //army.body.position.y = army.body.position.y - 10
+  //  }
+    //if(keyCode === 83){
+     /// army.body.position.y = army.body.position.y + 10
+  //  }
+  if (isTouching(army,enemy)){
+    enemy.velocityX = 0;
+    base.velocityX = 0;
+  }
      
 }
 
@@ -65,5 +85,15 @@ function spawnClouds() {
       console.log(cloud.y)
     }
     
+}
+function bullet(){
+  if (keyCode = 32){
+    var bullet = createSprite(1200,200,40,10);
+      bullet.addImage(bulletimg)
+      bullet.velocityX = -6;
+      bullet.scale = 0.03
+      bullet.y=army.y;
+      bullet.lifetime = 180;
+  }
 }
 
